@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cyber Defender Hub 🔐</title>
+<link rel="stylesheet" href="/static/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="theme-switch">
+    <input type="checkbox" id="toggle-dark" onclick="toggleTheme()"/>
+    <label for="toggle-dark">🌙 / ☀️</label>
+</div>
+
+<canvas id="matrix-canvas"></canvas>
+<canvas id="cursor-canvas"></canvas>
+
+<section id="welcome-section">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1 class="hero-title typing-text">Cyber Defender Hub</h1>
+        <p class="hero-text">Learn how to stay safe and secure your data.</p>
+        <div class="welcome-icons">
+            <div class="icon-circle" data-info="Use strong, unique passwords.">🔐</div>
+            <div class="icon-circle" data-info="Avoid suspicious links.">⚠️</div>
+            <div class="icon-circle" data-info="Enable two-factor authentication.">🔑</div>
+            <div class="icon-circle" data-info="Keep devices updated.">💻</div>
+        </div>
+        <div id="tip-tooltip"></div>
+        <button class="btn hero-btn" onclick="scrollDown()">Start Now</button>
+    </div>
+</section>
+
+<div id="main-content">
+    <h2>Encryption & Security Tools</h2>
+
+    <div class="card">
+        <textarea id="inputText" placeholder="Type text here..."></textarea>
+        <p class="live-score" id="liveScore">Security Score: 0/100</p>
+        <button class="btn" onclick="encrypt()">Encrypt 🔐</button>
+    </div>
+
+    <div class="card">
+        <h3>Encrypted Text</h3>
+        <p id="encryptedText" class="output"></p>
+        <button class="btn" onclick="downloadEncrypted()">⬇️ Download</button>
+    </div>
+
+    <div class="card">
+        <textarea id="decryptInput" placeholder="Paste encrypted text..."></textarea>
+        <button class="btn" onclick="decrypt()">Decrypt 🔓</button>
+    </div>
+
+    <div class="card">
+        <h3>Decrypted Text</h3>
+        <p id="decryptedText" class="output"></p>
+    </div>
+
+    <div class="card">
+        <h3>Security Score Breakdown</h3>
+        <p id="aiSecurityOutput" class="output"></p>
+    </div>
+
+    <div class="card">
+        <h3>Explanation</h3>
+        <p id="aiExplainOutput" class="output"></p>
+    </div>
+
+    <div class="stats-section">
+        <h3>Usage Statistics</h3>
+        <p>Total Encrypts: <span id="statEncrypts">0</span></p>
+        <p>Total Decrypts: <span id="statDecrypts">0</span></p>
+        <p>Avg Security Score: <span id="statAvgScore">0</span></p>
+        <canvas id="statsChart"></canvas>
+    </div>
+</div>
+
+<audio id="sound-click" src="https://cdn.pixabay.com/download/audio/2024/01/17/audio_812b3b2cca.mp3"></audio>
+<audio id="sound-success" src="https://cdn.pixabay.com/download/audio/2023/10/24/audio_0eaeef4d6f.mp3"></audio>
+<audio id="sound-hover" src="https://cdn.pixabay.com/download/audio/2024/02/10/audio_9c8b1db3ab.mp3"></audio>
+<audio id="sound-ambient" src="https://cdn.pixabay.com/download/audio/2024/02/22/audio_4e33b9d2ce.mp3" loop></audio>
+
+<script src="/static/js/particles.js"></script>
+<script src="/static/js/matrix.js"></script>
+<script src="/static/js/script.js"></script>
+</body>
+</html>
