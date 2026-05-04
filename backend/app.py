@@ -45,9 +45,25 @@ def send_sms_alert(threat_data):
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
-    if verify_login(data.get('username'), data.get('password')):
+    if verify_login(data.get('email'), data.get('password')):
         return jsonify({"status": "success", "token": "soc-auth-token-123"}), 200
     return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+
+@app.route('/api/signup', methods=['POST'])
+def signup():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    
+    # Simple validation
+    if not email or not password or len(password) < 6:
+        return jsonify({"status": "error", "message": "Invalid input. Password must be at least 6 characters."}), 400
+    
+    # For now, just verify it's a valid email and return success
+    # In production, you'd save to a database
+    if '@' in email:
+        return jsonify({"status": "success", "message": "Account created successfully", "token": "soc-auth-token-123"}), 200
+    return jsonify({"status": "error", "message": "Invalid email format"}), 400
 
 @app.route('/api/threats/current', methods=['GET'])
 def get_current_threats():

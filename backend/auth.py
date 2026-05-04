@@ -1,3 +1,3 @@
-def verify_login(username, password):
+def verify_login(email, password):
     # Hardcoded admin credentials for the prototype
-    return username == "admin" and password == "admin123"
+    return email == "admin@admin.com" and password == "admin123"

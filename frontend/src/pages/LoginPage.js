@@ -4,18 +4,48 @@ import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  // Unified login handler for both form and social buttons
-  const handleAuthAction = (e) => {
+  // Unified auth handler for login and signup
+  const handleAuthAction = async (e) => {
     if (e) e.preventDefault();
+    
+    if (!email || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+    
     setLoading(true);
     
-    // Simulate authentication delay
-    setTimeout(() => {
+    try {
+      const endpoint = isLogin ? '/api/login' : '/api/signup';
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.status === 'success') {
+        localStorage.setItem('soc_token', data.token);
+        // Small delay to ensure state updates
+        setTimeout(() => {
+          navigate('/dashboard', { replace: true });
+        }, 100);
+      } else {
+        alert(data.message || (isLogin ? 'Invalid credentials' : 'Signup failed'));
+      }
+    } catch (error) {
+      console.error('Auth error:', error);
+      alert(isLogin ? 'Login failed' : 'Signup failed');
+    } finally {
       setLoading(false);
-      navigate('/dashboard');
-    }, 1500);
+    }
   };
 
   const handleGoHome = () => {
@@ -51,6 +81,8 @@ const LoginPage = () => {
               placeholder="Enter your email" 
               style={styles.input} 
               required 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -62,6 +94,8 @@ const LoginPage = () => {
                 placeholder="Enter your password" 
                 style={styles.inputPassword} 
                 required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <span onClick={handleAuthAction} style={styles.passwordArrow}>→</span>
             </div>
