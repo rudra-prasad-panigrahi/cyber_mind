@@ -3049,3 +3049,12 @@ INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:53:34] "GET /api/threats/current HTT
 INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:54:33] "GET /api/threats/current HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:55:34] "GET /api/threats/current HTTP/1.1" 200 -
 INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:56:33] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:14] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:15] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:18] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:19] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:22] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:25] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:28] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:30] "GET /api/threats/current HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [04/May/2026 13:57:32] "GET /api/threats/current HTTP/1.1" 200 -
