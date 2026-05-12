@@ -1,38 +1,41 @@
-const cpCanvas = document.getElementById("cursor-canvas");
-const cpCtx = cpCanvas.getContext("2d");
+const cpCanvas = document.getElementById('cursor-canvas');
+const cpCtx = cpCanvas.getContext('2d');
 cpCanvas.width = window.innerWidth;
 cpCanvas.height = window.innerHeight;
 
-let particles = [];
-function Particle(x, y) {
-    this.x = x; this.y = y;
-    this.size = Math.random()*4+2;
-    this.life = 30;
-    this.dx = (Math.random()-0.5)*3;
-    this.dy = (Math.random()-0.5)*3;
+const trail = [];
+function spawnParticle(x, y) {
+  trail.push({ x, y, size: Math.random() * 4 + 1.5, alpha: 0.8, vx: (Math.random() - 0.5) * 1.4, vy: (Math.random() - 0.5) * 1.4 });
 }
-Particle.prototype.update = function() {
-    this.x += this.dx; this.y += this.dy; this.life--;
-}
-Particle.prototype.draw = function() {
-    cpCtx.fillStyle = "rgba(0,255,255,0.7)";
+
+function drawTrail() {
+  cpCtx.clearRect(0, 0, cpCanvas.width, cpCanvas.height);
+  trail.forEach((particle, index) => {
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+    particle.alpha *= 0.95;
+    cpCtx.fillStyle = `rgba(0, 229, 255, ${particle.alpha})`;
     cpCtx.beginPath();
-    cpCtx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+    cpCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     cpCtx.fill();
+    if (particle.alpha <= 0.03) trail.splice(index, 1);
+  });
 }
 
-function handleParticles() {
-    cpCtx.clearRect(0,0,cpCanvas.width,cpCanvas.height);
-    for(let i=0;i<particles.length;i++){
-        particles[i].update();
-        particles[i].draw();
-        if(particles[i].life <= 0){ particles.splice(i,1); i--; }
-    }
+function animateTrail() {
+  drawTrail();
+  requestAnimationFrame(animateTrail);
 }
-setInterval(handleParticles, 30);
 
-window.addEventListener("mousemove", function(e){
-    for(let i=0;i<3;i++){
-        particles.push(new Particle(e.clientX, e.clientY));
-    }
+window.addEventListener('mousemove', (event) => {
+  for (let i = 0; i < 3; i++) {
+    spawnParticle(event.clientX + Math.random() * 8 - 4, event.clientY + Math.random() * 8 - 4);
+  }
 });
+
+window.addEventListener('resize', () => {
+  cpCanvas.width = window.innerWidth;
+  cpCanvas.height = window.innerHeight;
+});
+
+animateTrail();

@@ -1,28 +1,67 @@
-const canvas = document.getElementById("matrix-canvas");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+const globeCanvas = document.getElementById('globe-canvas');
+if (globeCanvas) {
+  const globeRenderer = new THREE.WebGLRenderer({ canvas: globeCanvas, alpha: true, antialias: true });
+  globeRenderer.setPixelRatio(window.devicePixelRatio);
 
-const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()";
-const fontSize = 16;
-const columns = canvas.width / fontSize;
-let drops = [];
-for (let i = 0; i < columns; i++) drops[i] = 1;
+  const globeScene = new THREE.Scene();
+  const globeCamera = new THREE.PerspectiveCamera(75, globeCanvas.clientWidth / globeCanvas.clientHeight, 0.1, 1000);
+  globeCamera.position.set(0, 0, 3);
 
-function drawMatrix() {
-  ctx.fillStyle = "rgba(0,0,0,0.05)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#0F0";
-  ctx.font = fontSize + "px monospace";
-  for (let i = 0; i < drops.length; i++) {
-    const text = letters.charAt(Math.floor(Math.random() * letters.length));
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
+  const globeGeometry = new THREE.SphereGeometry(1, 64, 64);
+  const globeMaterial = new THREE.MeshBasicMaterial({
+    color: 0x001122,
+    transparent: true,
+    opacity: 0.8,
+    wireframe: true,
+  });
+  const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+  globeScene.add(globe);
+
+  const attackLines = [];
+  function createAttackLine(start, end) {
+    const points = [];
+    points.push(new THREE.Vector3(start.x, start.y, start.z));
+    points.push(new THREE.Vector3(end.x, end.y, end.z));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color: 0xff3d81, linewidth: 2 });
+    const line = new THREE.Line(geometry, material);
+    globeScene.add(line);
+    attackLines.push(line);
+    setTimeout(() => {
+      globeScene.remove(line);
+      attackLines.splice(attackLines.indexOf(line), 1);
+    }, 5000);
   }
+
+  function animateGlobe() {
+    requestAnimationFrame(animateGlobe);
+    globe.rotation.y += 0.005;
+    globeRenderer.render(globeScene, globeCamera);
+  }
+
+  function resizeGlobe() {
+    const width = globeCanvas.clientWidth;
+    const height = globeCanvas.clientHeight;
+    globeRenderer.setSize(width, height);
+    globeCamera.aspect = width / height;
+    globeCamera.updateProjectionMatrix();
+  }
+
+  window.addEventListener('resize', resizeGlobe);
+  resizeGlobe();
+  animateGlobe();
+
+  setInterval(() => {
+    const start = new THREE.Vector3(
+      (Math.random() - 0.5) * 2,
+      (Math.random() - 0.5) * 2,
+      (Math.random() - 0.5) * 2
+    ).normalize().multiplyScalar(1.01);
+    const end = new THREE.Vector3(
+      (Math.random() - 0.5) * 2,
+      (Math.random() - 0.5) * 2,
+      (Math.random() - 0.5) * 2
+    ).normalize().multiplyScalar(1.01);
+    createAttackLine(start, end);
+  }, 2000);
 }
-setInterval(drawMatrix, 25);
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
